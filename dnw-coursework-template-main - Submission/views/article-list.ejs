@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>Gareth's Blog</title>
+    <!-- Favicon-->
+    <link rel="icon" type="image/x-icon" href="../public/assets/favicon.ico" />
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link href="../public/css/styles.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <!-- Font Awesome CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <style>
+        .link-style {
+            color: black;
+            /* Set the default font color to black */
+            text-decoration: none;
+            /* Remove underline by default */
+            font-weight: bold;
+            /* Set the default font weight to bold */
+        }
+
+        /* Styles for the link when hovered */
+        .link-style:hover {
+            text-decoration: underline;
+            /* Add underline on hover */
+        }
+    </style>
+</head>
+
+<body>
+    <%- include('../partials/navbar-author') %>
+        <!-- Page header with logo and tagline-->
+        <header class="py-3 bg-light border-bottom mb-4">
+            <div class="container">
+                <div class="text-center my-3">
+                    <h1 class="fw-bolder">Welcome <%= settings.author_name %>!</h1>
+                    <p class="lead mb-0">You may view your published articles, edit or publish your saved drafts.
+                    </p>
+                </div>
+            </div>
+        </header>
+        <!-- Page content-->
+        <div class="container">
+            <!-- Create New Draft Button -->
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <a href="/author/new-article" class="btn btn-outline-dark" role="button">Create New Draft</a>
+                </div>
+                <div class="col-md-6">
+                    <!-- Empty column to create spacing on the right side -->
+                </div>
+            </div>
+            <!-- Draft Table -->
+            <div class="row mb-5">
+                <div class="col-md-12">
+                    <h3>Draft Articles</h3>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Title</th>
+                                <th scope="col">Subtitle</th>
+                                <th scope="col">Created</th>
+                                <th scope="col">Last Modified</th>
+                                <th scope="col">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% const draftArticles=articles.filter(article=> article.published === 0); %>
+                                <% if (draftArticles.length> 0) { %>
+                                    <% draftArticles.forEach(article=> { %>
+                                        <tr>
+                                            <td>
+                                                <%= article.article_title %>
+                                            </td>
+                                            <td>
+                                                <%= article.article_subtitle %>
+                                            </td>
+                                            <td>
+                                                <%= article.article_date %>
+                                            </td>
+                                            <td>
+                                                <%= article.last_modified %>
+                                            </td>
+                                            <td>
+                                                <form method="post"
+                                                    action="/author/publish-article/<%= article.article_id %>"
+                                                    style="display: inline;">
+                                                    <button type="submit"
+                                                        class="btn btn-outline-dark mr-2">Publish</button>
+                                                </form>
+                                                <a href="/author/edit-article/<%= article.article_id %>"
+                                                    class="btn btn-outline-dark mr-2" role="button">Edit</a>
+                                                <form method="post"
+                                                    action="/author/delete-article/<%= article.article_id %>">
+                                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                        <% }); %>
+                                            <% } else { %>
+                                                <p>No draft articles found.</p>
+                                                <% } %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- Published Table -->
+            <div class="row mb-5">
+                <div class="col-md-12">
+                    <h3>Published Articles</h3>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Title</th>
+                                <th scope="col">Subtitle</th>
+                                <th scope="col">Created</th>
+                                <th scope="col">Published</th>
+                                <th scope="col">Likes</th>
+                                <th scope="col">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% const publishedArticles=articles.filter(article=> article.published === 1); %>
+                                <% if (publishedArticles.length> 0) { %>
+                                    <% publishedArticles.forEach(article=> { %>
+                                        <tr>
+                                            <td>
+                                                <a href="/reader/article/<%= article.article_id %>" class="link-style">
+                                                    <%= article.article_title %>
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <%= article.article_subtitle %>
+                                            </td>
+                                            <td>
+                                                <%= article.article_date %>
+                                            </td>
+                                            <td>
+                                                <%= article.published_date %>
+                                            </td>
+                                            <td>
+                                                <%= article.likes_number %>
+                                            </td>
+                                            <td>
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <a href="/author/edit-article/<%= article.article_id %>"
+                                                            class="btn btn-outline-dark btn-block"
+                                                            role="button">Edit</a>
+                                                    </div>
+                                                    <div class="col-md-6s">
+                                                        <form method="post"
+                                                            action="/author/delete-article/<%= article.article_id %>">
+                                                            <button type="submit"
+                                                                class="btn btn-danger btn-block">Delete</button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <% }); %>
+                                            <% } else { %>
+                                                <p>No draft articles found.</p>
+                                                <% } %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- Footer-->
+        <footer class="py-5 bg-dark">
+            <div class="container">
+                <p class="m-0 text-center text-white">Copyright &copy; Your Website 2023</p>
+            </div>
+        </footer>
+        <!-- Bootstrap core JS-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+            crossorigin="anonymous"></script>
+        <!-- Core theme JS-->
+        <script src="../public/js/scripts.js"></script>
+</body>
+
+</html>

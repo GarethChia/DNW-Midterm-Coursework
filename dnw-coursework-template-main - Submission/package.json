@@ -1,0 +1,33 @@
+{
+  "name": "cm2040_template",
+  "version": "1.0.0",
+  "description": "A template for the mid-term assignment",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "clean": "rm database.db #remove the old database",
+    "clean-db": "del database.db #remove the old database",
+    "build": "cat db_schema.sql | sqlite3 database.db #build anew database from the sql file",
+    "build-db-local": "C:\\sqlite\\sqlite3.exe database.db -init .\\db_schema.sql",
+    "build-db": "type db_schema.sql | sqlite3 database.db #build anew database from the sql file",
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "author": "Simon Katan",
+  "license": "ISC",
+  "dependencies": {
+    "cookie-parser": "^1.4.6",
+    "date-fns": "^2.30.0",
+    "ejs": "^3.1.8",
+    "express": "^4.18.2",
+    "express-session": "^1.17.3",
+    "express-validator": "^7.0.1",
+    "nodemon": "^3.0.1",
+    "sqlite3": "^5.1.6",
+    "uuid": "^9.0.0"
+  },
+  "engines": {
+    "npm": ">=8.0.0",
+    "node": ">=16.0.0"
+  }
+}

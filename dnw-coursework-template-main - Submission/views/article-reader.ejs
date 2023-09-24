@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>Blog Post - Start Bootstrap Template</title>
+    <!-- Favicon-->
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link href="../public/css/styles.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <!-- Add Font Awesome CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+
+<body>
+    <!-- Responsive navbar-->
+    <%- include('../partials/navbar-reader') %>
+        <!-- Page content-->
+        <div class="container mt-5">
+            <div class="row">
+                <div class="col-lg-8">
+                    <!-- Post content-->
+                    <article>
+                        <!-- Post header-->
+                        <header class="mb-4">
+                            <!-- Post title-->
+                            <h1 class="fw-bolder mb-1">
+                                <%= articles.article_title %>
+                            </h1>
+                            <!-- Post meta content-->
+                            <div class="row">
+                                <div class="col-md-9">
+                                    <div class="text-muted fst-italic mb-2">Posted on <%= articles.published_date %> by
+                                            <%= articles.author_name %>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 text-end">
+                                    <button type="button" class="btn btn-outline-dark" id="likeButton"><span
+                                            id=" icon"><i class="far fa-thumbs-up"></i></span>
+                                        <span id="count">
+                                            <%= articles.likes_number %>
+                                        </span> Like</button>
+                                </div>
+                            </div>
+                        </header>
+                        <!-- Preview image figure-->
+                        <figure class="mb-4"><img class="img-fluid rounded"
+                                src="https://dummyimage.com/900x400/ced4da/6c757d.jpg" alt="..." /></figure>
+                        <!-- Post content-->
+                        <section class="mb-5">
+                            <p class="fs-5 mb-4">
+                                <%= articles.article_text %>
+                            </p>
+                        </section>
+                    </article>
+                    <!-- Comments section-->
+                    <section class="mb-5">
+                        <div class="card bg-light">
+                            <div class="card-body">
+                                <!-- Comment form-->
+                                <form class="mb-4" action="/reader/post-comment/<%= articles.article_id %>"
+                                    method="post">
+                                    <textarea class="form-control" rows="3" name="commentText"
+                                        placeholder="Join the discussion and leave a comment!"></textarea>
+                                    <button class="btn btn-outline-dark mt-3" type="submit">Submit</button>
+                                </form>
+                                <!-- Single comment-->
+                                <% if (comments.length> 0) { %>
+                                    <% comments.forEach(comment=> { %>
+                                        <div class="d-flex mb-3">
+                                            <div class="flex-shrink-0"><img class="rounded-circle"
+                                                    src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..." />
+                                            </div>
+                                            <div class="ms-3">
+                                                <div class="fw-bold">
+                                                    <%= comment.username %> on <%= comment.created_date %>
+                                                </div>
+                                                <%= comment.comment_text %>
+                                            </div>
+                                        </div>
+                                    <% }); %>
+                                <% } else { %>
+                                    <p>No comments yet.</p>
+                                <% } %>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+                <!-- Side widgets-->
+                <div class="col-lg-4">
+                    <!-- Side widget-->
+                    <div class="position-fixed end-0 p-3" style="width: 500px;">
+                        <div class="card mb-4">
+                            <div class="card-header">Author: <%= articles.author_name %>
+                            </div>
+                            <div class="card-body">Hi! I'm <%= articles.author_name %>. I am a freelance writer
+                                    interested about the world of knowledge.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Footer-->
+        <footer class="py-5 bg-dark">
+            <div class="container">
+                <p class="m-0 text-center text-white">Copyright &copy; Your Website 2023</p>
+            </div>
+        </footer>
+        <!-- AJAX Handling -->
+        <script>
+            const likeButton = document.getElementById('likeButton');
+            let isLiked = false;
+
+            likeButton.addEventListener('click', () => {
+                if (isLiked) {
+                    // If already liked, toggle off and decrease like count
+                    isLiked = false;
+                    updateLikes(-1);
+                } else {
+                    // If not liked, toggle on and increase like count
+                    isLiked = true;
+                    updateLikes(1);
+                }
+            });
+
+            function updateLikes(value) {
+                // Send a POST request to the server to update the like count
+                fetch('/reader/article/<%= articles.article_id %>', {
+                    method: 'POST',
+                    body: JSON.stringify({ value }),
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                })
+                    .then((response) => response.json())
+                    .then((data) => {
+                        // Update the like count on the frontend
+                        const likeCount = document.getElementById('likeCount');
+                        likeCount.textContent = data.likes;
+                    })
+                    .catch((error) => {
+                        console.error('Error updating likes:', error);
+                    });
+            }
+        </script>
+        <!-- Bootstrap core JS-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+            crossorigin="anonymous"></script>
+        <!-- Core theme JS-->
+        <script src="../public/js/scripts.js"></script>
+</body>
+
+</html>

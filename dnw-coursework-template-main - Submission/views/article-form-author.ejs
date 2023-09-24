@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>Gareth's Blog</title>
+    <!-- Favicon-->
+    <link rel="icon" type="image/x-icon" href="../public/assets/favicon.ico" />
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link href="../public/css/styles.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+</head>
+
+<body>
+    <%- include('../partials/navbar-author') %>
+        <!-- Page header with logo and tagline-->
+        <header class="py-3 bg-light border-bottom mb-4">
+            <div class="container">
+                <div class="text-center my-3">
+                    <h1 class="fw-bolder">Welcome <%= settings.author_name %>!</h1>
+                    <p class="lead mb-0">You may create new drafts here.</p>
+                </div>
+            </div>
+        </header>
+        <!-- Page content-->
+        <div class="container">
+            <div class="row mb-5">
+                <form action="/author/new-article" method="POST">
+                    <div class="form-group mb-3">
+                        <label for="article-title">Title</label>
+                        <input type="text" class="form-control" id="article-title" name="title"
+                            placeholder="Your article title" required>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="article-subtitle">Subtitle</label>
+                        <input type="text" class="form-control" id="article-subtitle" name="subtitle"
+                            placeholder="Your article subtitle" required>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="article-content">Content</label>
+                        <textarea class="form-control" id="article-content" name="content" rows="8" required></textarea>
+                    </div>
+                    <input type="hidden" name="published" value="false">
+                    <button type="submit" class="btn btn-primary mr-3">Save Draft</button>
+                    <a href="/author/home" class="btn btn-outline-dark" role="button">Cancel</a>
+                </form>
+            </div>
+        </div>
+        <!-- Footer-->
+        <footer class="py-5 bg-dark">
+            <div class="container">
+                <p class="m-0 text-center text-white">Copyright &copy; Your Website 2023</p>
+            </div>
+        </footer>
+        <!-- Bootstrap core JS-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+            crossorigin="anonymous"></script>
+        <!-- Core theme JS-->
+        <script src="../public/js/scripts.js"></script>
+</body>
+
+</html>
